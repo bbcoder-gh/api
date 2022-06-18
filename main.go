@@ -10,11 +10,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bbcoder-gh/api/pgxhelper"
 	"github.com/bbcoder-gh/api/router"
 )
 
 func main() {
 
+	pgxhelper.Connect()
 	router := router.Register()
 
 	srv := &http.Server{
