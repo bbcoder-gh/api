@@ -8,18 +8,20 @@ import (
 )
 
 type Config struct {
-	Name        string `json:"name"`
-	Version     string `json:"version"`
-	Description string `json:"description"`
-	Env         string `json:"env"`
-	DBHost      string `json:"db_host"`
-	DBUser      string `json:"db_user"`
-	DBPass      string `json:"db_pass"`
-	DBPort      string `json:"db_port"`
-	DBName      string `json:"db_name"`
+	Name        string `json:"name,omitempty"`
+	Version     string `json:"version,omitempty"`
+	Description string `json:"description,omitempty"`
+	ServerPort  string `json:"server_port,omitempty"`
+	Env         string `json:"env,omitempty"`
+	DBHost      string `json:"db_host,omitempty"`
+	DBUser      string `json:"db_user,omitempty"`
+	DBPass      string `json:"db_pass,omitempty"`
+	DBPort      string `json:"db_port,omitempty"`
+	DBName      string `json:"db_name,omitempty"`
 }
 
 var DBString string
+var Configuration *Config
 
 func Configure() {
 
@@ -43,14 +45,12 @@ func Configure() {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	// we initialize our Users array
-	var _config Config
-
+	Configuration = new(Config)
 	// we unmarshal our byteArray which contains our
 	// jsonFile's content into 'users' which we defined above
-	json.Unmarshal(byteValue, &_config)
+	json.Unmarshal(byteValue, &Configuration)
 
-	DBString = fmt.Sprintf("postgres://%s:%s@%s:%s/%s", _config.DBUser, _config.DBPass, _config.DBHost, _config.DBPort, "authman")
+	DBString = fmt.Sprintf("postgres://%s:%s@%s:%s/%s", Configuration.DBUser, Configuration.DBPass, Configuration.DBHost, Configuration.DBPort, "authman")
 	fmt.Println(DBString)
 }
 
