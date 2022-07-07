@@ -13,14 +13,25 @@ import (
 
 func main() {
 
-	pgxhelper.Connect()
+	//Connecting to Database
+	conn, err := pgxhelper.Connect()
+	if conn == nil {
+		log.Println("Could not connect with database")
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	//Registering the router
 	router := router.Register()
 
+	//Configuring the web server
 	srv := &http.Server{
 		Addr:    ":" + config.Configuration.ServerPort,
 		Handler: router,
 	}
 
+	// Run deferred graceful shutdown routine
 	defer httputils.GracefulShutdown(srv)
 
 	// Initializing the server in a goroutine so that
