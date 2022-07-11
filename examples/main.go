@@ -5,10 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/bbcoder-gh/api"
 	"github.com/bbcoder-gh/api/common/httputils"
-	"github.com/bbcoder-gh/api/config"
 	"github.com/bbcoder-gh/api/pgxhelper"
-	"github.com/bbcoder-gh/api/router"
 )
 
 func main() {
@@ -19,18 +18,11 @@ func main() {
 		log.Println("Could not connect with database")
 		if err != nil {
 			log.Println(err)
+			return
 		}
 	}
 
-	//Registering the router
-	router := router.Register()
-
-	//Configuring the web server
-	srv := &http.Server{
-		Addr:    ":" + config.Configuration.ServerPort,
-		Handler: router,
-	}
-
+	srv := api.GetServer()
 	// Run deferred graceful shutdown routine
 	defer httputils.GracefulShutdown(srv)
 
