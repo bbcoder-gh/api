@@ -22,7 +22,7 @@ func main() {
 		}
 	}
 
-	srv := api.GetServer()
+	srv := api.GetServer(9090)
 	// Run deferred graceful shutdown routine
 	defer httputils.GracefulShutdown(srv)
 

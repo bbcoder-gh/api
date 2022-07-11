@@ -2,19 +2,26 @@ package api
 
 import (
 	"net/http"
+	"strconv"
+	"sync"
 
-	"github.com/bbcoder-gh/api/config"
 	"github.com/bbcoder-gh/api/router"
 )
 
-func GetServer() (srv *http.Server) {
-	router := router.Register()
+var onlyOnce sync.Once
+var server *http.Server
 
-	//Configuring the web server
-	srv = &http.Server{
-		Addr:    ":" + config.Configuration.ServerPort,
-		Handler: router,
-	}
+func GetServer(port int) *http.Server {
 
-	return
+	onlyOnce.Do(func() {
+
+		//Configuring the web server
+		server = &http.Server{
+			Addr:    ":" + strconv.Itoa(port),
+			Handler: router.Register(),
+		}
+
+	})
+
+	return server
 }
