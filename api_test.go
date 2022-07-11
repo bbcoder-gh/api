@@ -12,8 +12,8 @@ func TestGetServer(t *testing.T) {
 	serverVar := GetServer(initializationPort)
 	secondServerVar := GetServer(reinitializationPort)
 
-	if server == nil || serverVar == nil {
-		t.Errorf("Server is uninitialized. server is %v", server)
+	if secondServerVar == nil || serverVar == nil {
+		t.Fatalf("Server is uninitialized. server is %v", server)
 	}
 
 	if !reflect.DeepEqual(serverVar, secondServerVar) || secondServerVar.Addr != serverVar.Addr {
